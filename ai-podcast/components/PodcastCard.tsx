@@ -17,7 +17,10 @@ const PodcastCard: React.FC<{
                 height={174}
                 />
         </figure>
-      Podcast Card
+      <div className='flex flex-col'>
+        <h1 className='text-16 font-bold text-white-1 truncate'>{title}</h1>
+        <p className='text-12 font-normal text-white-4 capitalize'>{description}</p>
+        </div>
     </div>
   )
 }

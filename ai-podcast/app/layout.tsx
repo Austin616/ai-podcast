@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
+import ConvexClerkProvider from "./providers/ConvexClerkProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const manrope = Manrope({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Podcastr",
-  description: "Generate your podcasts with AI",
+  description: "Generate your podcasts using AI",
   icons: {
     icon: '/icons/logo.svg'
-    
-  },
+  }
 };
 
 export default function RootLayout({
@@ -19,8 +19,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <ConvexClerkProvider>
+      <html lang="en">
+          <body className={`${manrope.className}`}>
+              {children}
+          </body>
+      </html>
+    </ConvexClerkProvider>
   );
 }
