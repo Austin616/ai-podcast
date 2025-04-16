@@ -16,19 +16,19 @@ const handleClerkWebhook = httpAction(async (ctx, request) => {
   }
   switch (event.type) {
     case "user.created":
-  // Log the event data for debugging
-  console.log("User created event data:", event.data);
-  
-  // Ensure first_name exists, else use a fallback (like "Unknown")
-  const name = event.data.first_name || "Unknown";
+      // Log the event data for debugging
+      console.log("User created event data:", event.data);
 
-  await ctx.runMutation(internal.users.createUser, {
-    clerkId: event.data.id,
-    email: event.data.email_addresses[0].email_address,
-    imageUrl: event.data.image_url,
-    name: name,
-  });
-  break;
+      // Ensure first_name exists, else use a fallback (like "Unknown")
+      const name = event.data.first_name || "Unknown";
+
+      await ctx.runMutation(internal.users.createUser, {
+        clerkId: event.data.id,
+        email: event.data.email_addresses[0].email_address,
+        imageUrl: event.data.image_url,
+        name: name,
+      });
+      break;
 
     case "user.updated":
       await ctx.runMutation(internal.users.updateUser, {
@@ -55,7 +55,6 @@ http.route({
   method: "POST",
   handler: handleClerkWebhook,
 });
-
 
 http.route({
   path: "/ping",
