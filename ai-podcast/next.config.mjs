@@ -43,6 +43,10 @@ const nextConfig = {
                 protocol: "https",
                 hostname: "www.listennotes.com",
             },
+            {
+                protocol: "https",
+                hostname: "compassionate-ostrich-171.convex.cloud"
+            }
             
         ],
     },
