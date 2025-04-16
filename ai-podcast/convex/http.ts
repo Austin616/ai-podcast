@@ -16,13 +16,20 @@ const handleClerkWebhook = httpAction(async (ctx, request) => {
   }
   switch (event.type) {
     case "user.created":
-      await ctx.runMutation(internal.users.createUser, {
-        clerkId: event.data.id,
-        email: event.data.email_addresses[0].email_address,
-        imageUrl: event.data.image_url,
-        name: event.data.first_name!,
-      });
-      break;
+  // Log the event data for debugging
+  console.log("User created event data:", event.data);
+  
+  // Ensure first_name exists, else use a fallback (like "Unknown")
+  const name = event.data.first_name || "Unknown";
+
+  await ctx.runMutation(internal.users.createUser, {
+    clerkId: event.data.id,
+    email: event.data.email_addresses[0].email_address,
+    imageUrl: event.data.image_url,
+    name: name, // Ensure name is not null
+  });
+  break;
+
     case "user.updated":
       await ctx.runMutation(internal.users.updateUser, {
         clerkId: event.data.id,
@@ -49,10 +56,20 @@ http.route({
   handler: handleClerkWebhook,
 });
 
+
+http.route({
+  path: "/ping",
+  method: "GET",
+  handler: httpAction(async () => {
+    return new Response("pong");
+  }),
+});
+
 const validateRequest = async (
   req: Request
 ): Promise<WebhookEvent | undefined> => {
   const webhookSecret = process.env.CLERK_WEBHOOK_SECRET!;
+  console.log("Validating request with secret:", webhookSecret);
   if (!webhookSecret) {
     throw new Error("CLERK_WEBHOOK_SECRET is not defined");
   }

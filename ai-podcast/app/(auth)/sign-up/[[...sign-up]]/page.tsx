@@ -4,8 +4,8 @@ const Page = () => {
   return (
     <div className="flex-center glassmorphism-auth h-screen w-full">
       <SignUp 
-       
-        signInUrl="/sign-in"
+        path="/sign-up" 
+        signInUrl="/sign-in"  // Set the local sign-in page URL
         />
     </div>
   )
