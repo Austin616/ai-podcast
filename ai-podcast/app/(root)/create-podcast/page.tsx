@@ -82,7 +82,7 @@ const CreatePodcast = () => {
 
       const podcast = await createPodcast({
         podcastTitle: data.podcastTitle,
-        description: data.podcastDescription,
+        podcastDescription: data.podcastDescription,
         audioUrl,
         imageUrl,
         voiceType,

@@ -46,7 +46,13 @@ const nextConfig = {
             {
                 protocol: "https",
                 hostname: "compassionate-ostrich-171.convex.cloud"
+            },
+            {
+                protocol: "https",
+                hostname: "img.clerk.com"
             }
+
+           
             
         ],
     },

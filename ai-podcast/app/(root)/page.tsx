@@ -1,7 +1,6 @@
 "use client";
 
 import PodcastCard from "@/components/PodcastCard";
-import { podcastData } from "@/constants";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { SignOutButton } from "@clerk/nextjs";
@@ -21,10 +20,10 @@ const Home = () => {
           {trendingPodcasts?.map(({ _id, podcastTitle, podcastDescription, imageUrl }) => (
             <PodcastCard
               key={_id}
-              podcastId={parseInt(_id)}
+              podcastId={_id}
               title={podcastTitle}
               description={podcastDescription}
-              imgURL={imageUrl!}
+              imgUrl={imageUrl!}
             />
           ))}
         </div>
