@@ -2,7 +2,7 @@
 
 Generate entire podcasts from a prompt using the power of AI. Podcastr lets users write a prompt, generate audio using OpenAI + ElevenLabs (or similar), and store/share episodes securely with built-in authentication and storage.
 
-![Podcastr Screenshot](public/cover.png)
+![Podcastr Screenshot](public/images/cover.png)
 
 ## ✨ Features
 
