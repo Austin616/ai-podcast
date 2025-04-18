@@ -19,6 +19,7 @@ const ProfileCard = ({
 
   const playRandomPodcast = () => {
     const randomIndex = Math.floor(Math.random() * podcastData.podcasts.length);
+
     setRandomPodcast(podcastData.podcasts[randomIndex]);
   };
 
