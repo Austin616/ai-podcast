@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { GeneratePodcastProps } from "@/types";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Loader } from "lucide-react";
-import { useState } from "react";
 import { useAction, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { v4 as uuidv4 } from "uuid";
 import { useUploadFiles } from "@xixixao/uploadstuff/react";
 import { generateUploadUrl } from "@/convex/files";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
+
+// Hook moved below to keep everything clean
 const useGeneratePodcast = ({
   setAudioStorageId,
   setAudio,
@@ -19,11 +27,11 @@ const useGeneratePodcast = ({
   voicePrompt,
   setVoicePrompt,
   setAudioDuration,
-}: GeneratePodcastProps) => {
+  scriptLength,
+}: GeneratePodcastProps & { scriptLength: "short" | "medium" | "long" }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   const generateUploadUrl = useMutation(api.files.generateUploadUrl);
-
   const { startUpload } = useUploadFiles(generateUploadUrl);
 
   const getPodcastAudio = useAction(api.openai.generateAudioAction);
@@ -31,19 +39,19 @@ const useGeneratePodcast = ({
 
   const generatePodcast = async () => {
     setIsGenerating(true);
-
     setAudio("");
 
     if (!voicePrompt) {
       toast({ title: "Please provide a voice" });
-      return setIsGenerating(false);
+      setIsGenerating(false);
+      return;
     }
 
-    // Generate the podcast audio using the provided voice type and prompt
     try {
       const response = await getPodcastAudio({
         voice: voiceType,
         input: voicePrompt,
+        length: scriptLength,
       });
 
       const blob = new Blob([response], { type: "/audio/mpeg" });
@@ -56,13 +64,13 @@ const useGeneratePodcast = ({
       setAudioStorageId(storageId);
       const audioUrl = await getAudioUrl({ storageId });
       setAudio(audioUrl!);
-      setIsGenerating(false);
       toast({ title: "Podcast generated successfully!" });
     } catch (error) {
       console.error("Error generating podcast:", error);
       toast({ title: "Error generating podcast", variant: "destructive" });
-      setIsGenerating(false);
     }
+
+    setIsGenerating(false);
   };
 
   return {
@@ -72,7 +80,12 @@ const useGeneratePodcast = ({
 };
 
 const GeneratePodcast = (props: GeneratePodcastProps) => {
-  const { isGenerating, generatePodcast } = useGeneratePodcast(props);
+  const [scriptLength, setScriptLength] = useState<"short" | "medium" | "long">("medium");
+  const { isGenerating, generatePodcast } = useGeneratePodcast({
+    ...props,
+    scriptLength,
+  });
+
   return (
     <div>
       <div className="flex flex-col gap-2.5">
@@ -86,6 +99,30 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
           value={props.voicePrompt}
           onChange={(event) => props.setVoicePrompt(event.target.value)}
         />
+      </div>
+
+      <div className="mt-4">
+        <Label className="text-16 font-bold text-white-1">Select Length</Label>
+        <Select
+          value={scriptLength}
+          onValueChange={(value) => setScriptLength(value as "short" | "medium" | "long")}
+        >
+          <SelectTrigger className="bg-black-1 border-none focus:ring-2 focus:ring-orange-1 text-16 w-full text-gray-1 font-bold">
+            <SelectValue placeholder="Select Length" />
+          </SelectTrigger>
+          <SelectContent className="bg-black-1 text-gray-1 font-bold">
+            <SelectItem value="short">
+              Short (1-2 minutes)
+            </SelectItem>
+            <SelectItem value="medium">
+              Medium (3-5 minutes)
+            </SelectItem>
+
+            <SelectItem value="long">
+              Long (6-10 minutes)
+            </SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="mt-5 w-full max-w-[200px]">
