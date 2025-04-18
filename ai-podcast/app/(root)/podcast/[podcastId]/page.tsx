@@ -40,9 +40,16 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
       </header>
 
       <PodcastDetailPlayer 
+        podcastTitle={podcast?.podcastTitle}
+        audioUrl={podcast?.audioUrl!}
+        imageUrl={podcast?.imageUrl!}
+        author={podcast?.author}
+        authorId={podcast?.authorId}
+        podcastId={podcastId}
         isOwner={isOwner}
-        podcastId={podcast._id}
-        {...podcast}
+        authorImageUrl={podcast?.authorImageUrl!}
+        imageStorageId={podcast?.imageStorageId!}
+        audioStorageId={podcast?.audioStorageId!}
       />
 
       <p className="text-white-2 text-16 pb-8 pt-[45px] font-medium max-md:text-center">{podcast?.podcastDescription}</p>
