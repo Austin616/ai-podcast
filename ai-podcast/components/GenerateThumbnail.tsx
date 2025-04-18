@@ -45,7 +45,7 @@ const GenerateThumbnail = ({
       const imageUrl = await getImageUrl({ storageId });
       setImage(imageUrl!);
       setIsImageLoading(false);
-      toast({ title: "Podcast generated successfully!" });
+      toast({ title: "Podcast thumbnail generated successfully!" });
     } catch (error) {
       console.error("Error handling image:", error);
       toast({ title: "Error handling image", variant: "destructive" });

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { api } from "@/convex/_generated/api";
+import { useAudio } from '@/providers/AudioProviders';
 import { PodcastDetailPlayerProps } from "@/types";
 
 import LoaderSpinner from "./LoaderSpinner";
@@ -12,7 +13,7 @@ import { Button } from "./ui/button";
 import { useToast } from "@/hooks/use-toast";
 
 
-const PodcastsDetailsPlayer = ({
+const PodcastDetailPlayer = ({
   audioUrl,
   podcastTitle,
   author,
@@ -25,7 +26,7 @@ const PodcastsDetailsPlayer = ({
   authorId,
 }: PodcastDetailPlayerProps) => {
   const router = useRouter();
-//   const { setAudio } = useAudio();
+  const { setAudio } = useAudio();
   const { toast } = useToast();
   const [isDeleting, setIsDeleting] = useState(false);
   const deletePodcast = useMutation(api.podcasts.deletePodcast);
@@ -46,15 +47,15 @@ const PodcastsDetailsPlayer = ({
     }
   };
 
-//   const handlePlay = () => {
-//     setAudio({
-//       title: podcastTitle,
-//       audioUrl,
-//       imageUrl,
-//       author,
-//       podcastId,
-//     });
-//   };
+  const handlePlay = () => {
+    setAudio({
+      title: podcastTitle,
+      audioUrl,
+      imageUrl,
+      author,
+      podcastId,
+    });
+  };
 
   if (!imageUrl || !authorImageUrl) return <LoaderSpinner />;
 
@@ -91,7 +92,7 @@ const PodcastsDetailsPlayer = ({
           </article>
 
           <Button
-            // onClick={handlePlay}
+            onClick={handlePlay}
             className="text-16 w-full max-w-[250px] bg-orange-1 font-extrabold text-white-1"
           >
             <Image
@@ -134,4 +135,4 @@ const PodcastsDetailsPlayer = ({
   );
 };
 
-export default PodcastsDetailsPlayer;
+export default PodcastDetailPlayer;
